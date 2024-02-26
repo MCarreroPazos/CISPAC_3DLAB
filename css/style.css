@@ -1,42 +1,25 @@
-/* Reset list styles */
+/* Reset the padding and margin to remove browser default styles */
 ul {
-    list-style: none;
-    padding: 0;
+    list-style-type: none;
     margin: 0;
-}
-
-/* Navigation menu styling */
-nav {
-    text-align: center; /* Center the navigation menu */
-    margin-bottom: 20px; /* Space below the navigation menu */
-}
-
-nav ul {
     padding: 0;
-    display: inline-block; /* Center the list */
+    overflow: hidden;
+    background-color: #333; /* Dark background for the menu */
 }
 
-nav ul li {
-    display: inline; /* Display menu items inline */
+li {
+    float: left;
 }
 
-nav ul li a {
-    display: inline-block;
-    background-color: #007BFF; /* Button color */
-    color: white; /* Text color */
-    padding: 10px 20px; /* Button padding */
-    margin: 5px; /* Space between buttons */
-    text-decoration: none; /* Remove underline from links */
-    border-radius: 5px; /* Rounded corners */
-    transition: background-color 0.3s; /* Smooth background color transition */
-}
-
-nav ul li a:hover {
-    background-color: #0056b3; /* Darker shade on hover */
-}
-
-/* Main title styling */
-h1 {
+li a {
+    display: block;
+    color: white; /* White text color */
     text-align: center;
-    margin: 20px 0; /* Space around the title */
+    padding: 14px 20px; /* Spacing around the links */
+    text-decoration: none;
+}
+
+/* Change background color of links on hover */
+li a:hover {
+    background-color: #117a8b;
 }
