@@ -1,13 +1,9 @@
-/* Reset styles */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
+    padding: 20px;
+    background: #f4f4f4; /* Light grey background */
+    color: #333; /* Dark text for contrast */
 }
 
 h1, p {
@@ -15,50 +11,27 @@ h1, p {
     margin-bottom: 20px;
 }
 
-/* Navigation Menu Styles */
-nav {
-    background: #333;
-    padding: 10px 20px;
-}
-
 nav ul {
     list-style: none;
-    display: flex;
-    justify-content: center;
     padding: 0;
+    text-align: center; /* Center the menu */
 }
 
 nav ul li {
-    margin: 0 10px;
+    display: inline-block; /* Display inline for horizontal layout */
+    margin: 0 10px; /* Spacing between buttons */
 }
 
-nav ul li a {
-    color: white;
-    text-decoration: none;
+.button {
+    display: inline-block;
+    background-color: #007bff; /* Button color */
+    color: #ffffff; /* Text color */
+    padding: 10px 20px; /* Button padding */
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth background color change on hover */
 }
 
-.hamburger {
-    display: none;
-    cursor: pointer;
-    font-size: 24px;
-    color: white;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    nav ul {
-        display: none;
-        flex-direction: column;
-        width: 100%;
-    }
-
-    nav ul li {
-        text-align: center;
-        width: 100%;
-        margin: 10px 0;
-    }
-
-    .hamburger {
-        display: block;
-    }
+.button:hover {
+    background-color: #0056b3; /* Darker button color on hover */
 }
