@@ -1,52 +1,61 @@
-/* Style the hamburger icon */
-.hamburger {
-    display: none;
-    cursor: pointer;
-    font-size: 30px; /* Size of the hamburger icon */
-    color: white; /* Color of the hamburger icon */
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-/* Responsive layout */
-@media screen and (max-width: 600px) {
-    .hamburger {
-        display: block; /* Show the hamburger icon on small screens */
-    }
-
-    ul {
-        display: none; /* Hide the menu initially */
-        flex-direction: column; /* Stack the links vertically */
-        width: 100%; /* Full width */
-    }
-
-    li {
-        text-align: center; /* Center-align the links */
-    }
+body {
+    font-family: Arial, sans-serif;
 }
 
-/* Style for the navigation menu */
+/* Navigation Menu Styles */
 nav {
-    text-align: center; /* Center the menu */
+    text-align: center;
+    margin-bottom: 20px; /* Space below the nav */
 }
 
 nav ul {
-    list-style-type: none; /* Remove bullet points */
-    padding: 0; /* Remove default padding */
-    margin: 0; /* Remove default margins */
-    display: inline-block; /* Center the menu with text-align on nav */
+    list-style: none;
+    padding: 0;
+    display: flex; /* Use flexbox for horizontal alignment */
+    justify-content: center; /* Center the menu items */
+    gap: 20px; /* Space between menu items */
 }
 
 nav ul li {
-    display: inline; /* Display list items inline for a horizontal layout */
-    margin-right: 20px; /* Add some space between the menu items */
+    display: block;
 }
 
 nav ul li a {
-    text-decoration: none; /* Remove underline from links */
-    color: black; /* Set the text color for links */
-    font-size: 16px; /* Set the font size for links */
+    text-decoration: none;
+    color: #333;
+    font-size: 18px;
 }
 
-/* Style for the menu items on hover */
 nav ul li a:hover {
-    color: #117a8b; /* Change text color on hover */
+    color: #007bff;
+}
+
+/* Hamburger menu styles */
+.hamburger {
+    display: none;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .hamburger {
+        display: block;
+    }
+
+    nav ul {
+        flex-direction: column;
+        display: none;
+    }
+
+    nav ul li {
+        text-align: center;
+        margin: 10px 0;
+    }
 }
