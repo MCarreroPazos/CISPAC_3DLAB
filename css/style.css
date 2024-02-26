@@ -1,4 +1,4 @@
-/* Basic Reset */
+/* Reset styles */
 * {
     margin: 0;
     padding: 0;
@@ -7,55 +7,58 @@
 
 body {
     font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+h1, p {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 /* Navigation Menu Styles */
 nav {
-    text-align: center;
-    margin-bottom: 20px; /* Space below the nav */
+    background: #333;
+    padding: 10px 20px;
 }
 
 nav ul {
     list-style: none;
+    display: flex;
+    justify-content: center;
     padding: 0;
-    display: flex; /* Use flexbox for horizontal alignment */
-    justify-content: center; /* Center the menu items */
-    gap: 20px; /* Space between menu items */
 }
 
 nav ul li {
-    display: block;
+    margin: 0 10px;
 }
 
 nav ul li a {
+    color: white;
     text-decoration: none;
-    color: #333;
-    font-size: 18px;
 }
 
-nav ul li a:hover {
-    color: #007bff;
-}
-
-/* Hamburger menu styles */
 .hamburger {
     display: none;
     cursor: pointer;
+    font-size: 24px;
+    color: white;
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
-    .hamburger {
-        display: block;
-    }
-
+/* Responsive */
+@media (max-width: 768px) {
     nav ul {
-        flex-direction: column;
         display: none;
+        flex-direction: column;
+        width: 100%;
     }
 
     nav ul li {
         text-align: center;
+        width: 100%;
         margin: 10px 0;
+    }
+
+    .hamburger {
+        display: block;
     }
 }
