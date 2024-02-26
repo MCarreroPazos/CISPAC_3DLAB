@@ -1,25 +1,24 @@
-/* Reset the padding and margin to remove browser default styles */
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333; /* Dark background for the menu */
+/* Style the hamburger icon */
+.hamburger {
+    display: none;
+    cursor: pointer;
+    font-size: 30px; /* Size of the hamburger icon */
+    color: white; /* Color of the hamburger icon */
 }
 
-li {
-    float: left;
-}
+/* Responsive layout */
+@media screen and (max-width: 600px) {
+    .hamburger {
+        display: block; /* Show the hamburger icon on small screens */
+    }
 
-li a {
-    display: block;
-    color: white; /* White text color */
-    text-align: center;
-    padding: 14px 20px; /* Spacing around the links */
-    text-decoration: none;
-}
+    ul {
+        display: none; /* Hide the menu initially */
+        flex-direction: column; /* Stack the links vertically */
+        width: 100%; /* Full width */
+    }
 
-/* Change background color of links on hover */
-li a:hover {
-    background-color: #117a8b;
+    li {
+        text-align: center; /* Center-align the links */
+    }
 }
