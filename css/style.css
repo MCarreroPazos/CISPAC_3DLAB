@@ -22,3 +22,31 @@
         text-align: center; /* Center-align the links */
     }
 }
+
+/* Style for the navigation menu */
+nav {
+    text-align: center; /* Center the menu */
+}
+
+nav ul {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove default padding */
+    margin: 0; /* Remove default margins */
+    display: inline-block; /* Center the menu with text-align on nav */
+}
+
+nav ul li {
+    display: inline; /* Display list items inline for a horizontal layout */
+    margin-right: 20px; /* Add some space between the menu items */
+}
+
+nav ul li a {
+    text-decoration: none; /* Remove underline from links */
+    color: black; /* Set the text color for links */
+    font-size: 16px; /* Set the font size for links */
+}
+
+/* Style for the menu items on hover */
+nav ul li a:hover {
+    color: #117a8b; /* Change text color on hover */
+}
