@@ -1,6 +1,42 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
+/* Reset list styles */
+ul {
+    list-style: none;
     padding: 0;
+    margin: 0;
+}
+
+/* Navigation menu styling */
+nav {
+    text-align: center; /* Center the navigation menu */
+    margin-bottom: 20px; /* Space below the navigation menu */
+}
+
+nav ul {
+    padding: 0;
+    display: inline-block; /* Center the list */
+}
+
+nav ul li {
+    display: inline; /* Display menu items inline */
+}
+
+nav ul li a {
+    display: inline-block;
+    background-color: #007BFF; /* Button color */
+    color: white; /* Text color */
+    padding: 10px 20px; /* Button padding */
+    margin: 5px; /* Space between buttons */
+    text-decoration: none; /* Remove underline from links */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+nav ul li a:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+/* Main title styling */
+h1 {
     text-align: center;
+    margin: 20px 0; /* Space around the title */
 }
