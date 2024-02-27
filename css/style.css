@@ -1,37 +1,36 @@
 body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    padding: 20px;
-    background: #f4f4f4; /* Light grey background */
-    color: #333; /* Dark text for contrast */
+    text-align: center; /* Center the content */
+    font-family: Arial, sans-serif; /* Use a common, readable font */
 }
 
-h1, p {
-    text-align: center;
-    margin-bottom: 20px;
+.member {
+    margin-bottom: 20px; /* Add space between each member */
+}
+
+.member p {
+    margin: 10px 0; /* Add some space above and below the name */
+}
+
+.member-image {
+    width: 100px; /* Specify width */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Make the image a block element */
+    margin: 0 auto; /* Center the image horizontally */
 }
 
 nav ul {
-    list-style: none;
-    padding: 0;
-    text-align: center; /* Center the menu */
+    list-style-type: none; /* Remove bullet points */
+    padding: 0; /* Remove padding */
+    margin: 20px 0; /* Add some margin at the top and bottom */
+    text-align: center; /* Ensure the menu is centered */
 }
 
 nav ul li {
-    display: inline-block; /* Display inline for horizontal layout */
-    margin: 0 10px; /* Spacing between buttons */
+    display: inline; /* Display the list items inline */
+    margin: 0 10px; /* Add some space between menu items */
 }
 
-.button {
-    display: inline-block;
-    background-color: #007bff; /* Button color */
-    color: #ffffff; /* Text color */
-    padding: 10px 20px; /* Button padding */
-    text-decoration: none; /* Remove underline */
-    border-radius: 5px; /* Rounded corners */
-    transition: background-color 0.3s; /* Smooth background color change on hover */
-}
-
-.button:hover {
-    background-color: #0056b3; /* Darker button color on hover */
+nav ul li a {
+    text-decoration: none; /* Remove underlines from links */
+    color: black; /* Set the text color */
 }
