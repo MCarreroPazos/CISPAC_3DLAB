@@ -21,6 +21,42 @@
         </ul>
     </nav>
 
+    <!-- Sección de Precios -->
+    <h2>Precios</h2>
+    <table>
+        <tr>
+            <th>Equipamiento</th>
+            <th>Descripción</th>
+            <th>Precio por hora</th>
+        </tr>
+        <tr>
+            <td>Workstation de procesamiento</td>
+            <td>Computador de alto rendimiento</td>
+            <td>$15</td>
+        </tr>
+        <tr>
+            <td>Dron LiDAR</td>
+            <td>Mapeo aéreo con LiDAR</td>
+            <td>$50</td>
+        </tr>
+        <tr>
+            <td>Láser escáner de corto alcance</td>
+            <td>Escaneo de precisión para objetos pequeños</td>
+            <td>$30</td>
+        </tr>
+        <tr>
+            <td>Láser escáner de largo alcance</td>
+            <td>Escaneo de estructuras y paisajes</td>
+            <td>$40</td>
+        </tr>
+        <tr>
+            <td>Impresora 3D</td>
+            <td>Prototipado rápido y fabricación aditiva</td>
+            <td>$20</td>
+        </tr>
+    </table>
+
+    <!-- Sección de Reserva -->
     <h2>Reserva de Equipos</h2>
     <div id="calendar"></div>
 
@@ -32,6 +68,7 @@
             <option value="Dron LiDAR">Dron LiDAR</option>
             <option value="Láser escáner de corto alcance">Láser escáner de corto alcance</option>
             <option value="Láser escáner de largo alcance">Láser escáner de largo alcance</option>
+            <option value="Impresora 3D">Impresora 3D</option>
         </select>
         <button id="confirmarReserva">Confirmar</button>
         <button id="cerrarModal">Cancelar</button>
@@ -80,6 +117,22 @@
     </script>
 
     <style>
+        /* Estilos para la tabla de precios */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+
+        /* Estilos para el modal */
         #modal {
             display: none;
             position: fixed;
