@@ -1,0 +1,10 @@
+{
+  "equipment": [
+    { "id": "eq1", "name": "Workstation de procesamiento" },
+    { "id": "eq2", "name": "Dron LiDAR" },
+    { "id": "eq3", "name": "Láser escáner de corto alcance" },
+    { "id": "eq4", "name": "Láser escáner de largo alcance" },
+    { "id": "eq5", "name": "Impresora 3D" }
+  ],
+  "reservations": []
+}

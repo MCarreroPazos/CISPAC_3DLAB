@@ -62,93 +62,21 @@
 
     <!-- Modal de selección -->
     <div id="modal">
-        <h3>Selecciona un equipo</h3>
-        <select id="equipoSelect">
-            <option value="Workstation de procesamiento">Workstation de procesamiento</option>
-            <option value="Dron LiDAR">Dron LiDAR</option>
-            <option value="Láser escáner de corto alcance">Láser escáner de corto alcance</option>
-            <option value="Láser escáner de largo alcance">Láser escáner de largo alcance</option>
-            <option value="Impresora 3D">Impresora 3D</option>
+        <h3>Realizar Reserva</h3>
+        <label for="tituloReserva" style="display: block; margin-top: 10px; margin-bottom: 5px; font-weight: bold;">Título de la Reserva:</label>
+        <input type="text" id="tituloReserva" placeholder="Ej: Procesamiento fotos LiDAR" style="margin-bottom: 10px; padding: 8px; width: calc(100% - 22px); border: 1px solid #ccc; border-radius: 4px;">
+        
+        <label for="equipoSelect" style="display: block; margin-top: 10px; margin-bottom: 5px; font-weight: bold;">Selecciona un equipo:</label>
+        <select id="equipoSelect" style="margin-bottom: 10px; padding: 8px; width: calc(100% - 22px); border: 1px solid #ccc; border-radius: 4px;">
+            <!-- Options will be populated by JavaScript -->
+            <option value="" disabled selected>Cargando equipos...</option> 
         </select>
-        <button id="confirmarReserva">Confirmar</button>
-        <button id="cerrarModal">Cancelar</button>
+        
+        <button id="confirmarReserva" style="padding: 10px; margin-top: 5px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">Confirmar Reserva</button>
+        <button id="cerrarModal" style="padding: 10px; margin-top: 5px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancelar</button>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var calendarEl = document.getElementById('calendar');
-            var selectedDate = null;
-
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                locale: 'es',
-                editable: true,
-                selectable: true,
-                events: [], // Aquí se cargarán las reservas
-                dateClick: function(info) {
-                    selectedDate = info.dateStr;
-                    abrirModal();
-                }
-            });
-            calendar.render();
-
-            function abrirModal() {
-                document.getElementById("modal").style.display = "block";
-            }
-
-            function cerrarModal() {
-                document.getElementById("modal").style.display = "none";
-            }
-
-            document.getElementById("confirmarReserva").addEventListener("click", function() {
-                let equipo = document.getElementById("equipoSelect").value;
-                let nuevaReserva = {
-                    title: equipo,
-                    start: selectedDate
-                };
-
-                console.log("Reserva guardada:", nuevaReserva);
-                calendar.addEvent(nuevaReserva);
-                cerrarModal();
-            });
-
-            document.getElementById("cerrarModal").addEventListener("click", cerrarModal);
-        });
-    </script>
-
-    <style>
-        /* Estilos para la tabla de precios */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #f4f4f4;
-        }
-
-        /* Estilos para el modal */
-        #modal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 20px;
-            box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
-            z-index: 1000;
-        }
-        #modal select, #modal button {
-            display: block;
-            margin: 10px 0;
-        }
-    </style>
-
+    <script src="js/script.js" defer></script>
 </body>
 </html>
