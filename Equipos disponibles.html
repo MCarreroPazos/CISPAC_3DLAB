@@ -74,11 +74,44 @@
             <li>Dron LiDAR</li>
             <li>Láser escáner de corto alcance</li>
             <li>Láser escáner de largo alcance</li>
-            <li>Impresora 3D</li> <!-- Nuevo equipo añadido -->
+            <!-- Los elementos de la lista se cargarán dinámicamente -->
         </ul>
 
         <a href="index.html">Volver al inicio</a>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const equipmentListUl = document.querySelector('.container ul'); 
+
+            if (equipmentListUl) {
+                fetch('/api/equipment')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('La respuesta de la red no fue correcta: ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(equipmentData => {
+                        equipmentListUl.innerHTML = ''; // Limpiar elementos estáticos existentes
+                        if (equipmentData && equipmentData.length > 0) {
+                            equipmentData.forEach(equipment => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = equipment.name; // Asumiendo que la API devuelve { id: '...', name: '...' }
+                                equipmentListUl.appendChild(listItem);
+                            });
+                        } else {
+                            equipmentListUl.innerHTML = '<li>No hay equipos disponibles en este momento.</li>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar los equipos:', error);
+                        equipmentListUl.innerHTML = '<li>Error al cargar la lista de equipos. Por favor, intente más tarde.</li>';
+                    });
+            } else {
+                console.error('No se encontró el elemento <ul> para la lista de equipos.');
+            }
+        });
+    </script>
 </body>
 </html>
