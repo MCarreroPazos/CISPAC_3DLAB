@@ -9,9 +9,48 @@ function toggleMenu() {
 
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('calendar');
+    if (!calendarEl) {
+        console.error("CRITICAL: #calendar element not found.");
+        // Attempt to display error on page for clear visibility
+        if (document.body) {
+             const errorDiv = document.createElement('div');
+             errorDiv.innerHTML = "<h1 style='color:red;'>Error: #calendar div missing. Check HTML structure.</h1>";
+             document.body.insertBefore(errorDiv, document.body.firstChild);
+        }
+        return;
+    }
+
     var selectedStartISO = null; 
     var selectedEndISO = null;   
     const equipmentFilterSelect = document.getElementById('equipmentFilterSelect'); // For the filter
+
+    // Function to open modal
+    function abrirModal() {
+        // Reset form fields (good practice)
+        const tituloReserva = document.getElementById('tituloReserva');
+        if(tituloReserva) tituloReserva.value = '';
+        const equipoSelect = document.getElementById('equipoSelect');
+        if(equipoSelect) equipoSelect.value = ""; // Reset to placeholder
+
+        const modal = document.getElementById("modal");
+        if(modal) {
+            modal.style.display = "block";
+            console.log("abrirModal called, modal display set to block.");
+        } else {
+            console.error("Modal element #modal not found");
+        }
+    }
+    
+    // Function to close modal
+    function cerrarModal() {
+        const modal = document.getElementById("modal");
+        if(modal) {
+            modal.style.display = "none";
+            console.log("cerrarModal called, modal display set to none.");
+        } else {
+            console.error("Modal element #modal for closing not found");
+        }
+    }
 
     var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'timeGridWeek',
@@ -19,13 +58,22 @@ document.addEventListener('DOMContentLoaded', function() {
         headerToolbar: {
           left: 'prev,next today',
           center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay' // Added dayGridDay for more view options
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
         editable: true, 
         selectable: true, 
+        selectMirror: true, // Good UX for selection
+        
+        select: function(selectionInfo) {
+            console.log('Calendar select triggered:', selectionInfo); 
+            selectedStartISO = selectionInfo.startStr;
+            selectedEndISO = selectionInfo.endStr;
+            abrirModal(); 
+        },
         events: function(fetchInfo, successCallback, failureCallback) {
+          // Using 'equipmentFilterSelect' variable defined in the outer scope
+          const selectedEquipmentId = equipmentFilterSelect ? equipmentFilterSelect.value : "";
           let apiUrl = '/api/reservations';
-          const selectedEquipmentId = equipmentFilterSelect ? equipmentFilterSelect.value : ""; // Check if filter select exists
           if (selectedEquipmentId) {
             apiUrl += `?equipment_id=${selectedEquipmentId}`;
           }
@@ -55,17 +103,19 @@ document.addEventListener('DOMContentLoaded', function() {
               console.error('Error fetching reservations:', error);
               failureCallback(error); 
             });
-        },
-        select: function(selectionInfo) {
-          selectedStartISO = selectionInfo.startStr;
-          selectedEndISO = selectionInfo.endStr;
-          // Field resets moved to abrirModal
-          abrirModal();
         }
     });
-    calendar.render();
+    
+    try {
+        calendar.render();
+        console.log('Calendar render() called successfully.');
+    } catch (e) {
+        console.error('Error calling calendar.render():', e);
+        if(calendarEl) calendarEl.innerHTML = `<p style='color:red; font-weight:bold;'>Failed to render FullCalendar. Error: ${e.message}. Check console.</p>`;
+    }
 
-    // Dynamically populate equipment dropdowns (modal and filter)
+
+    // Dynamically populate equipment dropdowns (modal and filter) - Existing robust logic
     fetch('/api/equipment')
       .then(response => {
           if (!response.ok) {
@@ -77,65 +127,78 @@ document.addEventListener('DOMContentLoaded', function() {
         const equipoSelectModal = document.getElementById('equipoSelect'); 
         if (equipoSelectModal) {
             equipoSelectModal.innerHTML = '<option value="" disabled selected>Seleccione un equipo...</option>'; 
-            equipmentList.forEach(equipment => {
-              const optionModal = document.createElement('option');
-              optionModal.value = equipment.id; 
-              optionModal.text = equipment.name;
-              equipoSelectModal.appendChild(optionModal);
-            });
+            if (Array.isArray(equipmentList)) {
+                equipmentList.forEach(equipment => {
+                    if (equipment && typeof equipment.id !== 'undefined' && typeof equipment.name !== 'undefined') {
+                        const optionModal = document.createElement('option');
+                        optionModal.value = equipment.id; 
+                        optionModal.textContent = equipment.name;
+                        equipoSelectModal.appendChild(optionModal);
+                    }
+                });
+            }
         }
 
-        if (equipmentFilterSelect) { // Check if filter select exists on the page
-            while (equipmentFilterSelect.options.length > 1) { // Keep "Todos los Equipos"
+        if (equipmentFilterSelect) {
+            // console.log('Populating #equipmentFilterSelect. Current options length:', equipmentFilterSelect.options.length);
+            while (equipmentFilterSelect.options.length > 1) {
                 equipmentFilterSelect.remove(1);
             }
+            // console.log('Equipment list for filter:', equipmentList); 
+            if (!Array.isArray(equipmentList)) {
+                console.error('Equipment list for filter is not an array:', equipmentList);
+                if (equipmentFilterSelect.options.length <= 1) { 
+                    const errorOption = document.createElement('option');
+                    errorOption.textContent = 'Error: Formato de datos incorrecto';
+                    errorOption.disabled = true;
+                    equipmentFilterSelect.appendChild(errorOption);
+                }
+                return; 
+            }
             equipmentList.forEach(equipment => {
-              const optionFilter = document.createElement('option');
-              optionFilter.value = equipment.id;
-              optionFilter.text = equipment.name;
-              equipmentFilterSelect.appendChild(optionFilter);
+                if (equipment && typeof equipment.id !== 'undefined' && typeof equipment.name !== 'undefined') {
+                  const option = document.createElement('option');
+                  option.value = equipment.id;
+                  option.textContent = equipment.name; 
+                  equipmentFilterSelect.appendChild(option);
+                } else {
+                  console.warn('Skipping invalid equipment item for filter:', equipment);
+                }
             });
+            // console.log('#equipmentFilterSelect populated. New options length:', equipmentFilterSelect.options.length);
         }
       })
       .catch(error => {
-        console.error('Error fetching equipment for dropdowns:', error);
+        console.error('Error fetching or parsing equipment for dropdowns:', error.message);
         const equipoSelectModal = document.getElementById('equipoSelect');
-        if (equipoSelectModal) equipoSelectModal.innerHTML = '<option value="">Error al cargar equipos</option>';
-        
-        if (equipmentFilterSelect) { // Check if filter select exists
-            equipmentFilterSelect.innerHTML = '<option value="">Error al cargar filtros</option>'; 
-            const defaultOption = document.createElement('option');
-            defaultOption.value = "";
-            defaultOption.text = "Todos los Equipos";
-            equipmentFilterSelect.insertBefore(defaultOption, equipmentFilterSelect.firstChild);
+        if (equipoSelectModal) {
+            equipoSelectModal.innerHTML = '<option value="">Error al cargar</option>';
+        }
+        if (equipmentFilterSelect) {
+            equipmentFilterSelect.innerHTML = '<option value="">Todos los Equipos</option>'; 
+            const errorOption = document.createElement('option');
+            errorOption.textContent = 'Error al cargar equipos';
+            errorOption.disabled = true;
+            equipmentFilterSelect.appendChild(errorOption);
         }
       });
 
     // Event listener for the filter, if it exists
     if (equipmentFilterSelect) {
         equipmentFilterSelect.addEventListener('change', function() {
-            calendar.refetchEvents();
+            if (calendar) calendar.refetchEvents();
         });
     }
-
-    function abrirModal() {
-        const modal = document.getElementById("modal");
-        if (modal) {
-            modal.style.display = "block";
-            // Reset form fields when opening
-            const tituloReservaEl = document.getElementById('tituloReserva');
-            if (tituloReservaEl) tituloReservaEl.value = '';
-            
-            const equipoSelectEl = document.getElementById('equipoSelect');
-            if (equipoSelectEl) equipoSelectEl.value = ""; // Reset to the placeholder which should have value=""
-        }
+    
+    // Attach event listener to #cerrarModal button
+    const cerrarModalButton = document.getElementById('cerrarModal');
+    if (cerrarModalButton) {
+        cerrarModalButton.addEventListener('click', cerrarModal);
+    } else {
+        console.warn('#cerrarModal button not found. Modal may not close via button.');
     }
 
-    function cerrarModal() {
-        const modal = document.getElementById("modal");
-        if (modal) modal.style.display = "none";
-    }
-
+    // Logic for #confirmarReserva button (existing robust logic)
     const confirmarReservaBtn = document.getElementById("confirmarReserva");
     if (confirmarReservaBtn) {
         confirmarReservaBtn.addEventListener("click", function() {
@@ -168,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
             let endDate = new Date(selectedEndISO);
 
             if (startDate.getTime() === endDate.getTime()) {
-                endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // Add 1 hour
+                endDate = new Date(startDate.getTime() + 60 * 60 * 1000); 
             }
 
             const reservationData = {
@@ -193,23 +256,21 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => {
                 if (response.ok) {
-                return response.json(); // This is the created reservation object from the server
+                    return response.json();
                 } else {
-                // Try to parse error as JSON, otherwise use statusText
                     return response.json().then(err => { throw err; }).catch(() => { throw new Error(response.statusText || `Error ${response.status}`); });
                 }
             })
-        .then(serverEvent => { // serverEvent is the object returned by the backend
-            // Add the event returned by the server to the calendar
-            calendar.addEvent({
-                title: serverEvent.title, // Use title from server response
-                start: serverEvent.date + 'T' + serverEvent.start_time,
-                end: serverEvent.date + 'T' + serverEvent.end_time,
-                extendedProps: {
-                    equipment_id: serverEvent.equipment_id,
-                    reservation_id: serverEvent.id // Assuming 'id' is the reservation ID from backend
-                }
-            });
+            .then(serverEvent => { 
+                calendar.addEvent({
+                    title: serverEvent.title, 
+                    start: serverEvent.date + 'T' + serverEvent.start_time,
+                    end: serverEvent.date + 'T' + serverEvent.end_time,
+                    extendedProps: {
+                        equipment_id: serverEvent.equipment_id,
+                        reservation_id: serverEvent.id
+                    }
+                });
                 cerrarModal();
                 alert('Reserva confirmada exitosamente!');
             })
@@ -228,10 +289,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Error al realizar la reserva: ' + errorMessage);
             });
         });
-    }
-
-    const cerrarModalBtn = document.getElementById("cerrarModal");
-    if (cerrarModalBtn) {
-        cerrarModalBtn.addEventListener("click", cerrarModal);
     }
 });
