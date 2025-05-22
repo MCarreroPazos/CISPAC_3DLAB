@@ -1,10 +1,11 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 import json
-import uuid # For generating unique IDs
-from flask_cors import CORS # New import
+import uuid
+from datetime import datetime
 
 app = Flask(__name__)
-CORS(app) # New line to enable CORS
+CORS(app)
 
 DATA_FILE = 'data.json'
 
@@ -13,72 +14,67 @@ def load_data():
         with open(DATA_FILE, 'r') as f:
             return json.load(f)
     except FileNotFoundError:
-        # This case should ideally not happen if data.json is always created
         return {"equipment": [], "reservations": []}
 
 def save_data(data):
     with open(DATA_FILE, 'w') as f:
         json.dump(data, f, indent=2)
 
-@app.route('/api/equipment', methods=['GET'])
+@app.route('/equipos', methods=['GET'])
 def get_equipment():
     data = load_data()
     return jsonify(data.get("equipment", []))
 
-@app.route('/api/reservations', methods=['GET'])
+@app.route('/reservas', methods=['GET'])
 def get_reservations():
     data = load_data()
-    all_reservations = data.get("reservations", [])
-    
-    equipment_id_filter = request.args.get('equipment_id')
+    equipment_id = request.args.get('equipo_id')
+    reservas = data.get("reservations", [])
+    if equipment_id:
+        reservas = [r for r in reservas if r["equipo_id"] == equipment_id]
+    return jsonify(reservas)
 
-    if equipment_id_filter:
-        filtered_reservations = [
-            res for res in all_reservations if res.get('equipment_id') == equipment_id_filter
-        ]
-        return jsonify(filtered_reservations)
-    else:
-        return jsonify(all_reservations)
-
-@app.route('/api/reservations', methods=['POST'])
+@app.route('/reservas', methods=['POST'])
 def create_reservation():
     data = load_data()
-    new_reservation_data = request.get_json()
+    reservas = data.setdefault("reservations", [])
 
-    if not new_reservation_data:
-        return jsonify({"error": "Invalid input"}), 400
+    req = request.get_json()
+    title = req.get("title")
+    start = req.get("start")
+    end = req.get("end")
+    equipo_id = req.get("equipo_id")
 
-    equipment_id = new_reservation_data.get('equipment_id')
-    date = new_reservation_data.get('date')
-    start_time = new_reservation_data.get('start_time')
-    end_time = new_reservation_data.get('end_time')
-    title = new_reservation_data.get('title')
+    if not all([title, start, end, equipo_id]):
+        return jsonify({"error": "Faltan campos requeridos"}), 400
 
-    if not all([equipment_id, date, start_time, end_time, title]):
-        return jsonify({"error": "Missing fields in reservation data"}), 400
+    # Parse datetimes
+    try:
+        start_dt = datetime.fromisoformat(start)
+        end_dt = datetime.fromisoformat(end)
+    except ValueError:
+        return jsonify({"error": "Formato de fecha inválido"}), 400
 
-    # Conflict Detection
-    for r in data.get("reservations", []):
-        if r['equipment_id'] == equipment_id and r['date'] == date:
-            # Check for time overlap
-            # (StartA < EndB) and (EndA > StartB)
-            if start_time < r['end_time'] and end_time > r['start_time']:
-                return jsonify({"error": "Equipment already reserved for this time slot"}), 409
+    # Verificar conflicto
+    for r in reservas:
+        if r["equipo_id"] == equipo_id:
+            existing_start = datetime.fromisoformat(r["start"])
+            existing_end = datetime.fromisoformat(r["end"])
+            if start_dt < existing_end and end_dt > existing_start:
+                return jsonify({"error": "El equipo ya está reservado en ese horario"}), 409
 
-    # No conflict, create new reservation
-    new_reservation = {
-        "id": str(uuid.uuid4()), # Generate unique ID
-        "equipment_id": equipment_id,
-        "date": date,
-        "start_time": start_time,
-        "end_time": end_time,
-        "title": title
+    new_reserva = {
+        "id": str(uuid.uuid4()),
+        "title": title,
+        "start": start,
+        "end": end,
+        "equipo_id": equipo_id
     }
 
-    data.setdefault("reservations", []).append(new_reservation)
+    reservas.append(new_reserva)
     save_data(data)
 
-    return jsonify(new_reservation), 201
+    return jsonify(new_reserva), 201
 
 if __name__ == '__main__':
     app.run(debug=True)
