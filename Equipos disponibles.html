@@ -69,43 +69,49 @@
 
     <div class="container">
         <h1>Equipos Disponibles</h1>
-        <ul id="equipment-list">
-            <li>Cargando equipos...</li>
+        <ul>
+            <li>Workstation de procesamiento</li>
+            <li>Dron LiDAR</li>
+            <li>Láser escáner de corto alcance</li>
+            <li>Láser escáner de largo alcance</li>
+            <!-- Los elementos de la lista se cargarán dinámicamente -->
         </ul>
 
         <a href="index.html">Volver al inicio</a>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const equipmentListUl = document.getElementById('equipment-list');
+        document.addEventListener('DOMContentLoaded', function() {
+            const equipmentListUl = document.querySelector('.container ul'); 
 
-            fetch('http://127.0.0.1:5000/api/equipment')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error de red: ' + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then(equipmentData => {
-                    equipmentListUl.innerHTML = ''; // Limpiar la lista
-
-                    if (equipmentData.length > 0) {
-                        equipmentData.forEach(equipment => {
-                            const li = document.createElement('li');
-                            li.textContent = equipment.name; // { id, name }
-                            equipmentListUl.appendChild(li);
-                        });
-                    } else {
-                        equipmentListUl.innerHTML = '<li>No hay equipos disponibles en este momento.</li>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al cargar los equipos:', error);
-                    equipmentListUl.innerHTML = '<li>Error al cargar los equipos. Intenta más tarde.</li>';
-                });
+            if (equipmentListUl) {
+                fetch('/api/equipment')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('La respuesta de la red no fue correcta: ' + response.statusText);
+                        }
+                        return response.json();
+                    })
+                    .then(equipmentData => {
+                        equipmentListUl.innerHTML = ''; // Limpiar elementos estáticos existentes
+                        if (equipmentData && equipmentData.length > 0) {
+                            equipmentData.forEach(equipment => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = equipment.name; // Asumiendo que la API devuelve { id: '...', name: '...' }
+                                equipmentListUl.appendChild(listItem);
+                            });
+                        } else {
+                            equipmentListUl.innerHTML = '<li>No hay equipos disponibles en este momento.</li>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al cargar los equipos:', error);
+                        equipmentListUl.innerHTML = '<li>Error al cargar la lista de equipos. Por favor, intente más tarde.</li>';
+                    });
+            } else {
+                console.error('No se encontró el elemento <ul> para la lista de equipos.');
+            }
         });
     </script>
-
 </body>
 </html>
