@@ -1,8 +1,10 @@
 from flask import Flask, jsonify, request
 import json
 import uuid # For generating unique IDs
+from flask_cors import CORS # New import
 
 app = Flask(__name__)
+CORS(app) # New line to enable CORS
 
 DATA_FILE = 'data.json'
 
