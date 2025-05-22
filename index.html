@@ -58,6 +58,15 @@
 
     <!-- Sección de Reserva -->
     <h2>Reserva de Equipos</h2>
+
+    <div id="filterContainer" style="margin-bottom: 10px; padding: 10px; background-color: #f0f0f0; border-radius: 5px;">
+        <label for="equipmentFilterSelect" style="margin-right: 8px; font-weight: bold;">Filtrar por Equipo:</label>
+        <select id="equipmentFilterSelect" style="padding: 5px; border-radius: 3px; border: 1px solid #ccc;">
+            <option value="">Todos los Equipos</option>
+            <!-- Equipment options will be dynamically populated by JavaScript -->
+        </select>
+    </div>
+
     <div id="calendar"></div>
 
     <!-- Modal de selección -->
@@ -76,7 +85,6 @@
         <button id="cerrarModal" style="padding: 10px; margin-top: 5px; background-color: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Cancelar</button>
     </div>
 
-    <script>
     <script src="js/script.js" defer></script>
 </body>
 </html>

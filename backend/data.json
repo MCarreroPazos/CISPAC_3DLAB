@@ -1,10 +1,16 @@
 {
   "equipment": [
     { "id": "eq1", "name": "Workstation de procesamiento" },
-    { "id": "eq2", "name": "Dron LiDAR" },
-    { "id": "eq3", "name": "Láser escáner de corto alcance" },
-    { "id": "eq4", "name": "Láser escáner de largo alcance" },
-    { "id": "eq5", "name": "Impresora 3D" }
+    { "id": "eq2", "name": "Dron LiDAR" }
   ],
-  "reservations": []
+  "reservations": [
+    {
+      "id": "api-res-test",
+      "equipment_id": "eq1",
+      "title": "API FETCH TEST EVENT",
+      "date": "2025-05-21", 
+      "start_time": "11:00",
+      "end_time": "13:00"
+    }
+  ]
 }

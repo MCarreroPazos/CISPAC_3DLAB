@@ -26,7 +26,17 @@ def get_equipment():
 @app.route('/api/reservations', methods=['GET'])
 def get_reservations():
     data = load_data()
-    return jsonify(data.get("reservations", []))
+    all_reservations = data.get("reservations", [])
+    
+    equipment_id_filter = request.args.get('equipment_id')
+
+    if equipment_id_filter:
+        filtered_reservations = [
+            res for res in all_reservations if res.get('equipment_id') == equipment_id_filter
+        ]
+        return jsonify(filtered_reservations)
+    else:
+        return jsonify(all_reservations)
 
 @app.route('/api/reservations', methods=['POST'])
 def create_reservation():
